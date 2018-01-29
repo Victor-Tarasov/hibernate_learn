@@ -18,27 +18,31 @@ public class DBTests {
 
     @Autowired
     private EntityManagerFactory emf;
-    private EntityManager session;
+    private Session session;
+    private EntityManager entityManager;
 
     @Test
     public void whenFindByName_thenReturnEmployee() {
         startTransaction();
-        ((Session) session).save("org.sample.spring.model.IEmployee", new Employee());
-        closeTransaction();
+        Employee firstEmployee = new Employee();
+        entityManager.merge(firstEmployee);
+        Employee secondEmployee = new Employee().setId(1L);
+        Employee mergeResult = entityManager.merge(secondEmployee);
+        commitTransaction();
     }
 
-    private void closeTransaction() {
+    private void commitTransaction() {
         session.getTransaction().commit();
         session.close();
     }
 
     private void startTransaction() {
-        Session session = makeSession();
+        makeSession();
         session.getTransaction().begin();
-        this.session = session;
     }
 
-    private Session makeSession() {
-        return emf.unwrap(SessionFactory.class).openSession();
+    private void makeSession() {
+        this.entityManager = emf.createEntityManager();
+        this.session = entityManager.unwrap(Session.class);
     }
 }

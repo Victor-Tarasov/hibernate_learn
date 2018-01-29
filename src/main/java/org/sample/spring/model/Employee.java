@@ -1,6 +1,21 @@
 package org.sample.spring.model;
 
-public class Employee implements IEmployee {
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+@Getter
+@Setter
+@Accessors(chain = true)
+public class Employee {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
 
@@ -8,26 +23,6 @@ public class Employee implements IEmployee {
     }
 
     public Employee(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
         this.name = name;
     }
 }
